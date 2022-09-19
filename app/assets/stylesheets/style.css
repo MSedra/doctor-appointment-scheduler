@@ -1,0 +1,26 @@
+*,*:after,*:before{
+	box-sizing: border-box;
+}
+
+body{
+	font-family: arial;
+	font-size: 16px;
+	margin: 0;
+	background: linear-gradient(to right top, #0ecae8, #0ee894);
+	min-height: 100vh;
+
+}
+
+.search_container{
+	width: 100%;
+	margin: 80px auto;
+	display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.search_tags {
+  width: 180px;
+  height: 40px;
+}
+

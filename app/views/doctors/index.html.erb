@@ -1,0 +1,47 @@
+<% if not params[:city].present? %>
+  <% params[:city] = "All Cities" %>
+<% end %>  
+<% if not params[:speciality].present? %>
+  <% params[:speciality] = "All Specialities" %>
+<% end %>  
+
+<%= form_tag doctors_path, method:"get" do |form| %>
+<div class="search_container">
+  <h2> Search for doctors by city and speciality :</h2>
+  <div>
+    <select name=city class="search_tags form-control">
+      <option value='<%= params[:city] %>'><%=  params[:city] %></option>
+      <% @cities.each do |city| %>
+        <% if city!=params[:city] %>
+          <option value='<%= city %>'><%= city %></option>
+        <% end %>  
+      <% end %>  
+    </select>
+  </div>
+  <div>
+    <select name=speciality class="search_tags form-control">
+      <option value='<%= params[:speciality] %>'><%=  params[:speciality] %></option>
+      <% @specialities.each do |speciality| %>
+        <% if speciality!=params[:speciality] %>
+          <option value='<%= speciality %>'><%= speciality %></option>
+        <% end %>
+      <% end %>  
+    </select>
+  </div>
+  <div>
+    <%= submit_tag 'Search', class:"btn btn-primary", name: nil %>
+  </div>  
+</div>
+<% end %>  
+
+<div id="doctors">
+  <h1> <%= params[:speciality] %> in <%= params[:city] %></h1><br/>
+  <% @doctors.each do |doctor| %>
+    <%= render doctor %>
+    <p>
+      <%= link_to "Show this doctor", doctor %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New doctor", new_doctor_path %>
