@@ -5,11 +5,11 @@
   <% params[:speciality] = "All Specialities" %>
 <% end %>  
 
-<%= form_tag doctors_path, method:"get" do |form| %>
+<%= form_tag doctors_path, method:"get", class:"doctors_form" do |form| %>
 <div class="search_container">
-  <h2> Search for doctors by city and speciality :</h2>
+  <h2> Search for doctors :</h2>
   <div>
-    <select name=city class="search_tags form-control">
+    <select name=city class="form-control search_tags">
       <option value='<%= params[:city] %>'><%=  params[:city] %></option>
       <% @cities.each do |city| %>
         <% if city!=params[:city] %>
@@ -19,7 +19,7 @@
     </select>
   </div>
   <div>
-    <select name=speciality class="search_tags form-control">
+    <select name=speciality class="form-control search_tags">
       <option value='<%= params[:speciality] %>'><%=  params[:speciality] %></option>
       <% @specialities.each do |speciality| %>
         <% if speciality!=params[:speciality] %>
@@ -29,19 +29,40 @@
     </select>
   </div>
   <div>
+    <%= text_field_tag :name, params[:name], class: "form-control search_tags", placeholder: "Search by Name" %>
+  </div>
+  <div>
     <%= submit_tag 'Search', class:"btn btn-primary", name: nil %>
-  </div>  
+    <% link_to "Search", "#", :onclick=>"$('.doctors_form').submit()", class:"btn btn-primary" %>
+  </div>
 </div>
 <% end %>  
 
-<div id="doctors">
-  <h1> <%= params[:speciality] %> in <%= params[:city] %></h1><br/>
-  <% @doctors.each do |doctor| %>
-    <%= render doctor %>
-    <p>
-      <%= link_to "Show this doctor", doctor %>
-    </p>
-  <% end %>
-</div>
 
+<div id="doctors">
+  <h1> <%= params[:speciality] %> in <%= params[:city] %></h1>
+  <br/>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Speciality</th>
+        <th scope="col">City</th>
+        <th scope="col">Price per vvisit</th>
+        <th scope="col">Show</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @doctors.each do |doctor| %>
+        <tr>
+          <td><%= doctor.name %></td>
+          <td><%= doctor.speciality %></td>
+          <td><%= doctor.city %></td>
+          <td><%= doctor.price_per_visit %></td>
+          <td><%= link_to "Show this doctor", doctor %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 <%= link_to "New doctor", new_doctor_path %>

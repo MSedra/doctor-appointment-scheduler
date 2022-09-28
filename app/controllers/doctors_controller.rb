@@ -1,30 +1,24 @@
 class DoctorsController < ApplicationController
-  before_action :set_doctor, only: %i[ show edit update destroy ]
+  before_action :set_doctor, only: %i[ show edit update destroy ] 
+  #before_action :authenticate_user!, only: %i[:book_appointment]
 
   # GET /doctors or /doctors.json
   def index
-    specific_city = false
-    specific_speciality = false
-    if params[:city] and params[:city]!="All Cities"
-      specific_city = true
-    end  
-    if params[:speciality] and params[:speciality]!="All Specialities"
-      specific_speciality = true
-    end  
 
-    if specific_city and specific_speciality
-      @doctors = Doctor.where(city: params[:city], speciality: params[:speciality])
-    elsif specific_city
-      @doctors = Doctor.where(city: params[:city])
-    elsif specific_speciality 
-      @doctors = Doctor.where(speciality: params[:speciality])
-    else 
-      @doctors = Doctor.all 
-    end    
+    if params[:city] and params[:city]=="All Cities"
+      params[:city] = nil
+    end
+    
+    if params[:speciality] and params[:speciality]=="All Specialities" 
+      params[:speciality] = nil
+    end  
+    @doctors = Doctor.where("city like ? and speciality like ? and name like ?", "#{params[:city]}%", "#{params[:speciality]}%", "#{params[:name]}%")
+   
   end
 
   # GET /doctors/1 or /doctors/1.json
   def show
+    @appointments = Appointment.where(doctor_id: @doctor.id).order(starting_time: :asc)
   end
 
   # GET /doctors/new
@@ -74,6 +68,10 @@ class DoctorsController < ApplicationController
     end
   end
 
+  def book_appointment 
+    flash.now[:notice] = 'Message sent!'
+  end  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_doctor
@@ -82,6 +80,6 @@ class DoctorsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def doctor_params
-      params.require(:doctor).permit(:name, :speciality, :city, :price_per_visit)
+      params.require(:doctor).permit(:name, :speciality, :city, :price_per_visit, :appointment_id)
     end
 end

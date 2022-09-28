@@ -2,9 +2,43 @@
 
 <%= render @doctor %>
 
+<%= form_tag(url: doctor_book_appointment_path, method: :put, local: true) do |f| %>
+<div>
+  <h1> Available appointments for doctor <%= @doctor.name %></h1>
+  <br/>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Day</th>
+        <th scope="col">Date</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+        <th scope="col">Booking</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @appointments.each do |appointment| %>
+        <tr>
+          <td><%= appointment.starting_time.strftime("%A") %></td>
+          <td><%= appointment.starting_time.strftime("%d of %B, %Y") %></td>
+          <td><%= appointment.starting_time.strftime("%I:%M %p") %></td>
+          <td><%= appointment.ending_time.strftime("%I:%M %p") %></td>
+          <td>
+            <%= button_tag(:type => "submit", :class=> "btn btn-primary", params[:appointment_id] => appointment.id) do %>
+              <span> Book Appointment </span>
+            <% end %>  
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>
+
 <div>
   <%= link_to "Edit this doctor", edit_doctor_path(@doctor) %> |
   <%= link_to "Back to doctors", doctors_path %>
 
   <%= button_to "Destroy this doctor", @doctor, method: :delete %>
 </div>
+

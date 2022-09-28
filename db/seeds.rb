@@ -17,11 +17,28 @@ specialities = ["Allergist","Cardiologist","Child psychiatrist","Dermatologist",
 	"Radiation Oncologist","Radiologist","Rheumatologist","Stomatologist","Venereologist"]
 
 
-num = [1,2,3,4,5]
-10.times do 
-	name = Faker::Name.name 
-	city = cities.sample
-	speciality = specialities.sample
-	price_per_visit = 100 * rand(1..5)
-	Doctor.create(name: name, city: city, speciality: speciality, price_per_visit: price_per_visit)
-end	
+#num = [1,2,3,4,5]
+#10.times do 
+#	name = Faker::Name.name 
+#	city = cities.sample
+#	speciality = specialities.sample
+#	price_per_visit = 100 * rand(1..5)
+#	Doctor.create(name: name, city: city, speciality: speciality, price_per_visit: price_per_visit)	
+#end	
+
+def rand_time(from=Time.now+2.days, to=Time.now+20.days)
+  Time.at(rand_in_range(from.to_f, to.to_f))
+end
+
+def rand_in_range(from, to)
+  rand * (to - from) + from
+end
+
+doctors = Doctor.all 
+doctors.each do |doctor|
+	15.times do
+		time = rand_time
+		Appointment.create(doctor_id: doctor.id, starting_time: time, ending_time: time + 30.minute)
+	end
+end
+

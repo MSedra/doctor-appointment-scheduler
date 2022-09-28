@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :doctors
+  resources :doctors do 
+    put ':appointment_id', to: 'doctors#book_appointment', as: 'book_appointment'
+  end  
+
   devise_for :users
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'    
