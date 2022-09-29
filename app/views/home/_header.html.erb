@@ -20,18 +20,10 @@
           <li class="nav-item">
             <%= link_to 'Edit Profile' , edit_user_registration_path , class:"nav-link" %> 
           </li>
+          <li class="nav-item">
+            <%= link_to 'My Appointments', "/appointments/show", class:"nav-link" %>
+          </li> 
       <% end %> 
-      
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown link
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <% @cities.each do |city| %>
-            <a class="dropdown-item"><%= city %></a>
-          <% end %>  
-        </div>
-      </li>
     </ul>
   </div>
 </nav>

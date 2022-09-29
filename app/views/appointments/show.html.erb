@@ -1,0 +1,28 @@
+<div>
+  <h1> My Appointments</h1>
+  <br/>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Doctor</th>
+        <th scope="col">Day</th>
+        <th scope="col">Date</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @my_appointments.each do |appointment| %>
+        <tr>
+          <td><%= Doctor.find(appointment.doctor_id).name %></td>
+          <td><%= appointment.starting_time.strftime("%A") %></td>
+          <td><%= appointment.starting_time.strftime("%d of %B, %Y") %></td>
+          <td><%= appointment.starting_time.strftime("%I:%M %p") %></td>
+          <td><%= appointment.ending_time.strftime("%I:%M %p") %></td>
+        </tr>
+      <% end %>  
+    </tbody>
+  </table>
+</div>
+
+

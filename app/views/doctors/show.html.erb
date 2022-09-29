@@ -1,8 +1,5 @@
-<p style="color: green"><%= notice %></p>
-
 <%= render @doctor %>
 
-<%= form_tag(url: doctor_book_appointment_path, method: :put, local: true) do |f| %>
 <div>
   <h1> Available appointments for doctor <%= @doctor.name %></h1>
   <br/>
@@ -18,27 +15,32 @@
     </thead>
     <tbody>
       <% @appointments.each do |appointment| %>
-        <tr>
-          <td><%= appointment.starting_time.strftime("%A") %></td>
-          <td><%= appointment.starting_time.strftime("%d of %B, %Y") %></td>
-          <td><%= appointment.starting_time.strftime("%I:%M %p") %></td>
-          <td><%= appointment.ending_time.strftime("%I:%M %p") %></td>
-          <td>
-            <%= button_tag(:type => "submit", :class=> "btn btn-primary", params[:appointment_id] => appointment.id) do %>
-              <span> Book Appointment </span>
+        <%= form_with(url: doctor_book_appointment_path(@doctor, appointment), method: :put, local: true) do |f| %>
+          <tr>
+            <td><%= appointment.starting_time.strftime("%A") %></td>
+            <td><%= appointment.starting_time.strftime("%d of %B, %Y") %></td>
+            <td><%= appointment.starting_time.strftime("%I:%M %p") %></td>
+            <td><%= appointment.ending_time.strftime("%I:%M %p") %></td>
+            <% if appointment.user_id %>
+              <td><h4>Booked</h4></td>
+            <% else %>  
+              <td>
+                <%= button_tag(:type => "submit", :class=> "btn btn-primary") do %>
+                  <span> Book Appointment </span>
+                <% end %>  
+              </td>
             <% end %>  
-          </td>
-        </tr>
+          </tr>
+        <% end %>  
       <% end %>
     </tbody>
   </table>
 </div>
-<% end %>
 
 <div>
-  <%= link_to "Edit this doctor", edit_doctor_path(@doctor) %> |
-  <%= link_to "Back to doctors", doctors_path %>
+  <% link_to "Edit this doctor", edit_doctor_path(@doctor) %> 
+  <%= link_to "Back to doctors",  doctors_path, class:"btn btn-primary" %>
 
-  <%= button_to "Destroy this doctor", @doctor, method: :delete %>
+  <% button_to "Destroy this doctor", @doctor, method: :delete %>
 </div>
 

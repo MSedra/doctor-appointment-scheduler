@@ -1,6 +1,7 @@
 class DoctorsController < ApplicationController
   before_action :set_doctor, only: %i[ show edit update destroy ] 
-  #before_action :authenticate_user!, only: %i[:book_appointment]
+  
+  before_action :authenticate_user, except: [:index, :show]
 
   # GET /doctors or /doctors.json
   def index
@@ -69,7 +70,12 @@ class DoctorsController < ApplicationController
   end
 
   def book_appointment 
-    flash.now[:notice] = 'Message sent!'
+    appointment = Appointment.find(params[:appointment_id])
+    appointment.update(user_id: current_user.id)
+    respond_to do |format|
+      format.html { redirect_to doctor_url(params[:doctor_id]), notice: "Booked Successfully." }
+      format.json { head :no_content }
+    end
   end  
 
   private
@@ -77,6 +83,12 @@ class DoctorsController < ApplicationController
     def set_doctor
       @doctor = Doctor.find(params[:id])
     end
+
+    def authenticate_user
+      if not user_signed_in?
+        redirect_to new_user_session_path, :notice => 'Please Log in to continue'
+      end
+    end    
 
     # Only allow a list of trusted parameters through.
     def doctor_params
